@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "module": "commonjs",
+        "target": "ES2019",
+        "lib": [
+            "es5",
+            "es6",
+            "es7",
+            "es2017",
+            "es2019",
+            "dom"
+        ],
+        "downlevelIteration": true,
+        "sourceMap": true,
+        "allowJs": false,
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "incremental": false,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "declaration": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "allowUnusedLabels": true,
+        "noUnusedParameters": false,
+        "preserveSymlinks": true,
+        "jsx": "react",
+        "watch": true,
+        "skipLibCheck": true,
+        "strict": false,
+        "esModuleInterop": true,
+        "strictBindCallApply": true
+    },
+    "include": [
+        "src/**/*.ts",
+    ],
+    "exclude": [
+        "dist",
+        "node_modules/*",
+        "**/*.stories.*"
+    ],
+}

@@ -1,0 +1,19 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/color": "^3.0.6",
+    "color": "^4.2.3",
+    "ts-loader": "~8.2.0",
+    "typescript": "~5.0.4",
+    "webpack": "~4.43.0",
+    "webpack-cli": "~4.9.2"
+  }
+}

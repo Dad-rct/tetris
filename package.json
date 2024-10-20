@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/color": "^3.0.6",
+    "@types/color-convert": "^2.0.4",
     "color": "^4.2.3",
     "ts-loader": "~8.2.0",
     "typescript": "~5.0.4",

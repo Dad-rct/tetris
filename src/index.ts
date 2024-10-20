@@ -7,14 +7,33 @@ let currentColorIndex = 0;
 let currentShape = new Shape({ shape: AllShapes[currentShapeIndex], color: AllShapeColours[currentColorIndex] });
 let currentShapeCOORDS = new COORD({ x: 0, y: 0 });
 
-
 document.addEventListener("readystatechange", async () => {
     if (document.readyState === "complete") {
         const board = new GameBoard({ parentElement: document.getElementById("boardContainer") });
         board.drawBoard();
-        board.drawShape(currentShape, currentShapeCOORDS);
+        function addShape() {
+            currentShapeIndex = Math.floor(Math.random() * AllShapes.length);
+            currentColorIndex = Math.floor(Math.random() * AllShapeColours.length);
+            currentShape = new Shape({
+                shape: AllShapes[currentShapeIndex],
+                color: AllShapeColours[currentColorIndex]
+            });
+            const allPlaces = board.getShapeAvailablePlaces(currentShape);
+
+            const place = allPlaces[Math.floor(Math.random() * allPlaces.length)];
+            if (!place) {
+                return false;
+            }
+            const [coords, r] = place;
+            currentShapeCOORDS = coords;
+            for (let i = 0; i < r; i++)
+                currentShape.rotate();
+            board.log();
+            board.drawShape(currentShape, currentShapeCOORDS);
+            return true;
+        }
+        addShape();
         document.addEventListener("keydown", e => {
-            console.log(e.key)
             switch (e.key) {
                 case " ":
                     //change of shape
@@ -69,6 +88,10 @@ document.addEventListener("readystatechange", async () => {
                     currentShape.color = AllShapeColours[currentColorIndex];
                     board.drawShape(currentShape, currentShapeCOORDS);
                     break;
+                case "p":
+                    //place
+                    board.place(currentShape, currentShapeCOORDS);
+                    addShape();
             }
         })
 

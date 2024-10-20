@@ -8,14 +8,14 @@ body {
     position: relative;
 }
 
-#canvasBoard {
+#canvasBoard,
+#canvasPieces {
     border: solid 1px #FFF;
     border-radius: 20px;
 }
 
 #canvasPieces {
     position: absolute;
-    border: solid 1px red;
     left: 0;
-    top: 0
+    top: 0;
 }

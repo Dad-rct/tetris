@@ -1,6 +1,6 @@
 import { COORD } from "./coord";
 import { Shape } from "./shape";
-
+import Color from "color";
 const squareSize = 40;
 const gameBoardSquaresWidthCount = 10;
 const gameBoardSquaresHeightCount = 20;
@@ -99,12 +99,17 @@ export class GameBoard {
         for (const pixel of pixels) {
             this.grid[pixel.x][pixel.y] = shape.color;
         }
+        this.drawOrClearShape(shape, at, true);
+        this.drawOrClearShape(shape, at, false, 0.5);
     }
     //** draw or erase a shape from the canvas
-    private drawOrClearShape(shape: Shape, at: COORD, clear: boolean) {
+    private drawOrClearShape(shape: Shape, at: COORD, clear: boolean, opacity = 1) {
         const pixels = this.getPixelsWithOffset(shape, at);
-        this.ctxPieces.fillStyle = shape.color;
-        this.ctxPieces.strokeStyle = shape.color;
+        const color = opacity === 1
+            ? shape.color
+            : Color(shape.color).alpha(0.5).toString();
+        this.ctxPieces.fillStyle = color;
+        this.ctxPieces.strokeStyle = color;
         this.ctxPieces.beginPath();
         const fn = clear
             ? this.ctxPieces.clearRect.bind(this.ctxPieces)

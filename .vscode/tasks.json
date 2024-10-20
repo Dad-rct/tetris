@@ -5,7 +5,7 @@
 			"label": "webpack web producer",
 			"group": "build",
 			"isBackground": true,
-			"command": "./node_modules/.bin/webpack",
+			"command": ".${pathSeparator}node_modules${pathSeparator}.bin${pathSeparator}webpack",
 			"options": {
 				"cwd": "${workspaceFolder}",
 				"env": {

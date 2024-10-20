@@ -14,7 +14,7 @@
 				}
 			},
 			"args": [
-				".${pathSeparator}node_modules${pathSeparator}.bin${pathSeparator}webpack",
+				".${pathSeparator}node_modules${pathSeparator}webpack${pathSeparator}bin${pathSeparator}webpack.js",
 				"-c",
 				"webpack.config.js"
 			],

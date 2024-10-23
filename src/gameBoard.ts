@@ -1,4 +1,4 @@
-import { COORD } from "./coord";
+import { COORD, iCOORD } from "./coord";
 import { Shape } from "./shape";
 import Color from "color";
 const squareSize = 40;
@@ -50,7 +50,53 @@ export class GameBoard {
         }
         return places;
     }
-
+    destroyPixel(location: iCOORD, withConnected: boolean) {
+        const color = this.grid[location.x][location.y];
+        if (color) {
+            this.grid[location.x][location.y] = "";
+            this.ctxPieces.clearRect(location.x * squareSize, location.y * squareSize, squareSize, squareSize);
+            if (withConnected) {
+                const colorR = this.grid[location.x + 1]?.[location.y];
+                const colorL = this.grid[location.x - 1]?.[location.y];
+                const colorU = this.grid[location.x]?.[location.y - 1];
+                const colorD = this.grid[location.x]?.[location.y + 1];
+                if (colorR === color)
+                    this.destroyPixel({ ...location, x: location.x + 1 }, true);
+                if (colorL === color)
+                    this.destroyPixel({ ...location, x: location.x - 1 }, true);
+                if (colorU === color)
+                    this.destroyPixel({ ...location, y: location.y - 1 }, true);
+                if (colorD === color)
+                    this.destroyPixel({ ...location, y: location.y + 1 }, true);
+            }
+        }
+    }
+    destroyCompleteLines() {
+        const completeColumns = this.grid.map((col, x) => {
+            if (!col.some(v => !v)) return [x];
+            return []
+        }).flat();
+        const completeRows: number[] = [];
+        for (let y = 0; y < gameBoardSquaresHeightCount; y++) {
+            const row = Array.from(new Array(gameBoardSquaresWidthCount))
+                .map((_, idx) => this.grid[idx][y]);
+            if (!row.some(v => !v))
+                completeRows.push(y);
+        }
+        this.ctxPieces.beginPath();
+        for (const x of completeColumns) {
+            for (let y = 0; y < gameBoardSquaresHeightCount; y++) {
+                this.destroyPixel({ x, y }, false)
+            }
+        }
+        for (const y of completeRows) {
+            for (let x = 0; x < gameBoardSquaresWidthCount; x++) {
+                this.destroyPixel({ x, y }, false)
+            }
+        }
+        console.log(completeColumns, completeRows)
+        this.ctxPieces.stroke();
+    }
     drawBoard() {
         for (let x = 1; x < gameBoardSquaresWidthCount; x++) {
             const lineX = x * squareSize - this.ctxBoard.lineWidth;
@@ -73,12 +119,12 @@ export class GameBoard {
         }
     }
     /**add the co-ordinates for a shape to the coordinates for it's pixels */
-    private getPixelsWithOffset(shape: Shape, at: COORD) {
+    private getPixelsWithOffset(shape: Shape, at: iCOORD) {
         const pixels = shape.getPixels();
         return pixels.map(p => p.offset(at))
     }
     /**test if a shape can be drawn at the coordinates given */
-    canDrawShape(shape: Shape, at: COORD) {
+    canDrawShape(shape: Shape, at: iCOORD) {
         const pixels = this.getPixelsWithOffset(shape, at);
         for (const pixel of pixels) {
             //test if shape can be drawn here
@@ -100,29 +146,65 @@ export class GameBoard {
             this.grid[pixel.x][pixel.y] = shape.color;
         }
         this.drawOrClearShape(shape, at, true);
-        this.drawOrClearShape(shape, at, false, 0.5);
+        this.drawOrClearShape(shape, at, false, 0.4);
+    }
+    private drawPixel(pixel: iCOORD, color: string, opacity: number) {
+        const borderWidth = squareSize / 10;
+        const mainColor = Color(color).alpha(opacity).toString();
+        const hiColor = Color("#FFF").alpha(opacity * 0.4).toString();
+        const lowColor = Color("#000").alpha(opacity * 0.4).toString();
+        this.ctxPieces.fillStyle = mainColor;
+        this.ctxPieces.fillRect(pixel.x * squareSize, pixel.y * squareSize, squareSize, squareSize);
+        //top edge
+        this.ctxPieces.beginPath();
+        this.ctxPieces.fillStyle = hiColor;
+        this.ctxPieces.moveTo(pixel.x * squareSize, pixel.y * squareSize);
+        this.ctxPieces.lineTo((1 + pixel.x) * squareSize, pixel.y * squareSize);
+        this.ctxPieces.lineTo((1 + pixel.x) * squareSize - borderWidth, borderWidth + pixel.y * squareSize);
+        this.ctxPieces.lineTo(pixel.x * squareSize + borderWidth, borderWidth + pixel.y * squareSize);
+        this.ctxPieces.closePath();
+        this.ctxPieces.fill();
+        //right edge
+        this.ctxPieces.beginPath();
+        this.ctxPieces.fillStyle = lowColor;
+        this.ctxPieces.moveTo((1 + pixel.x) * squareSize, pixel.y * squareSize);
+        this.ctxPieces.lineTo((1 + pixel.x) * squareSize, (1 + pixel.y) * squareSize);
+        this.ctxPieces.lineTo((1 + pixel.x) * squareSize - borderWidth, (1 + pixel.y) * squareSize - borderWidth);
+        this.ctxPieces.lineTo((1 + pixel.x) * squareSize - borderWidth, pixel.y * squareSize + borderWidth);
+        this.ctxPieces.closePath();
+        this.ctxPieces.fill();
+        //left edge
+        this.ctxPieces.beginPath();
+        this.ctxPieces.fillStyle = hiColor;
+        this.ctxPieces.moveTo((pixel.x) * squareSize, pixel.y * squareSize);
+        this.ctxPieces.lineTo((pixel.x) * squareSize, (1 + pixel.y) * squareSize);
+        this.ctxPieces.lineTo((pixel.x) * squareSize + borderWidth, (1 + pixel.y) * squareSize - borderWidth);
+        this.ctxPieces.lineTo((pixel.x) * squareSize + borderWidth, pixel.y * squareSize + borderWidth);
+        this.ctxPieces.closePath();
+        this.ctxPieces.fill();
+        //bottom edge
+        this.ctxPieces.beginPath();
+        this.ctxPieces.fillStyle = lowColor;
+        this.ctxPieces.moveTo(pixel.x * squareSize, (1 + pixel.y) * squareSize);
+        this.ctxPieces.lineTo((1 + pixel.x) * squareSize, (1 + pixel.y) * squareSize);
+        this.ctxPieces.lineTo((1 + pixel.x) * squareSize - borderWidth, (1 + pixel.y) * squareSize - borderWidth);
+        this.ctxPieces.lineTo(pixel.x * squareSize + borderWidth, (1 + pixel.y) * squareSize - borderWidth);
+        this.ctxPieces.closePath();
+        this.ctxPieces.fill();
     }
     //** draw or erase a shape from the canvas
     private drawOrClearShape(shape: Shape, at: COORD, clear: boolean, opacity = 1) {
         const pixels = this.getPixelsWithOffset(shape, at);
-        const color = opacity === 1
-            ? shape.color
-            : Color(shape.color).alpha(0.5).toString();
-        this.ctxPieces.fillStyle = color;
-        this.ctxPieces.strokeStyle = color;
-        this.ctxPieces.beginPath();
-        const fn = clear
-            ? this.ctxPieces.clearRect.bind(this.ctxPieces)
-            : this.ctxPieces.fillRect.bind(this.ctxPieces);
+
         for (const pixel of pixels) {
-            fn(
+            this.ctxPieces.clearRect(
                 pixel.x * squareSize,
                 pixel.y * squareSize,
                 squareSize,
-                squareSize
-            );
+                squareSize);
+            if (!clear)
+                this.drawPixel(pixel, shape.color, opacity)
         }
-        this.ctxPieces.stroke();
     }
     drawShape(shape: Shape, at: COORD) {
         return this.drawOrClearShape(shape, at, false);

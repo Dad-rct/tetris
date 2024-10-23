@@ -1,4 +1,4 @@
-import { COORD } from "./coord";
+import { COORD, iCOORD } from "./coord";
 import { GameBoard } from "./gameBoard"
 import { AllShapeColours, AllShapes, Shape } from "./shape";
 
@@ -12,6 +12,7 @@ document.addEventListener("readystatechange", async () => {
         const board = new GameBoard({ parentElement: document.getElementById("boardContainer") });
         board.drawBoard();
         function addShape() {
+            board.destroyCompleteLines();
             currentShapeIndex = Math.floor(Math.random() * AllShapes.length);
             currentColorIndex = Math.floor(Math.random() * AllShapeColours.length);
             currentShape = new Shape({
@@ -48,7 +49,30 @@ document.addEventListener("readystatechange", async () => {
                     board.clearShape(currentShape, currentShapeCOORDS);
                     currentShape.rotate();
                     if (!board.canDrawShape(currentShape, currentShapeCOORDS)) {
-                        currentShape.shape = oldShape;
+                        //can we maybe acheive same by kicking block to allow for rotation
+                        let kickSize = 1;
+                        let canKick;
+                        const maxKickSize = Math.floor(currentShape.shape[0].length / 2);
+                        while (kickSize <= maxKickSize) {
+                            const offsets: iCOORD[] = [
+                                { x: kickSize, y: 0 },
+                                { x: -kickSize, y: 0 },
+                                { x: 0, y: kickSize },
+                                { x: 0, y: -kickSize }
+                            ]
+                            canKick = offsets.map(offset => currentShapeCOORDS.offset(offset))
+                                .find(coords => {
+                                    return (board.canDrawShape(currentShape, coords))
+                                });
+                            if (canKick)
+                                break;
+                            kickSize++
+                        }
+                        if (canKick) {
+                            currentShapeCOORDS = canKick
+                        } else {
+                            currentShape.shape = oldShape;
+                        }
                     }
                     board.drawShape(currentShape, currentShapeCOORDS)
                     break;

@@ -97,6 +97,20 @@ export class GameBoard {
         console.log(completeColumns, completeRows)
         this.ctxPieces.stroke();
     }
+    getCompleteLines() {
+        const completeColumns = this.grid.map((col, x) => {
+            if (!col.some(v => !v)) return [x];
+            return []
+        }).flat();
+        const completeRows: number[] = [];
+        for (let y = 0; y < gameBoardSquaresHeightCount; y++) {
+            const row = Array.from(new Array(gameBoardSquaresWidthCount))
+                .map((_, idx) => this.grid[idx][y]);
+            if (!row.some(v => !v))
+                completeRows.push(y);
+        }
+        return { completeColumns, completeRows }
+    }
     drawBoard() {
         for (let x = 1; x < gameBoardSquaresWidthCount; x++) {
             const lineX = x * squareSize - this.ctxBoard.lineWidth;

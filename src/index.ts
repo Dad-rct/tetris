@@ -12,7 +12,6 @@ document.addEventListener("readystatechange", async () => {
         const board = new GameBoard({ parentElement: document.getElementById("boardContainer") });
         board.drawBoard();
         function addShape() {
-            board.destroyCompleteLines();
             currentShapeIndex = Math.floor(Math.random() * AllShapes.length);
             currentColorIndex = Math.floor(Math.random() * AllShapeColours.length);
             currentShape = new Shape({
@@ -81,27 +80,27 @@ document.addEventListener("readystatechange", async () => {
                 case "arrowleft":
                 case "arrowup":
                 case "arrowdown":
-                    case "w":
-                        case "a":
-                            case "s":
-                                case "d":
+                case "w":
+                case "a":
+                case "s":
+                case "d":
                     const newCOORD = new COORD(currentShapeCOORDS);
                     switch (e.key.toLowerCase()) {
                         case "arrowright":
-                            case "d":
-                    
+                        case "d":
+
                             newCOORD.x++;
                             break;
                         case "arrowleft":
-                            case "a":
+                        case "a":
                             newCOORD.x--;
                             break;
                         case "arrowdown":
-                            case "s":
+                        case "s":
                             newCOORD.y++;
                             break;
                         case "arrowup":
-                            case "w":
+                        case "w":
                             newCOORD.y--;
                             break;
                     }
@@ -124,6 +123,9 @@ document.addEventListener("readystatechange", async () => {
                 case "p":
                     //place
                     board.place(currentShape, currentShapeCOORDS);
+                    const complete = board.getCompleteLines();
+                    console.log(complete, "£nt")
+                    board.destroyCompleteLines();
                     addShape();
             }
         })

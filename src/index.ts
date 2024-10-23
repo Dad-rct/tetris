@@ -34,7 +34,7 @@ document.addEventListener("readystatechange", async () => {
         }
         addShape();
         document.addEventListener("keydown", e => {
-            switch (e.key) {
+            switch (e.key.toLowerCase()) {
                 case " ":
                     //change of shape
                     board.clearShape(currentShape, currentShapeCOORDS);
@@ -53,22 +53,31 @@ document.addEventListener("readystatechange", async () => {
                     board.drawShape(currentShape, currentShapeCOORDS)
                     break;
                 }
-                case "ArrowRight":
-                case "ArrowLeft":
-                case "ArrowUp":
-                case "ArrowDown":
+                case "arrowright":
+                case "arrowleft":
+                case "arrowup":
+                case "arrowdown":
+                    case "w":
+                        case "a":
+                            case "s":
+                                case "d":
                     const newCOORD = new COORD(currentShapeCOORDS);
-                    switch (e.key) {
-                        case "ArrowRight":
+                    switch (e.key.toLowerCase()) {
+                        case "arrowright":
+                            case "d":
+                    
                             newCOORD.x++;
                             break;
-                        case "ArrowLeft":
+                        case "arrowleft":
+                            case "a":
                             newCOORD.x--;
                             break;
-                        case "ArrowDown":
+                        case "arrowdown":
+                            case "s":
                             newCOORD.y++;
                             break;
-                        case "ArrowUp":
+                        case "arrowup":
+                            case "w":
                             newCOORD.y--;
                             break;
                     }

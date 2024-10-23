@@ -13,10 +13,17 @@ export type Square2Shape = Tuple2<Tuple2<ShapePixel>>
 
 
 // 2 x 2 shapes
-export const ShapeO: Square2Shape =
+export const ShapeO: Square3Shape =
     [
-        ['X', 'X'],
-        ['X', 'X'],
+        [' ', ' ', ' '],
+        ['X', 'X', ' '],
+        ['X', 'X', ' '],
+    ];
+    export const ShapeN: Square3Shape =
+    [
+        ['X', 'X', 'X'],
+        ['X', 'X', 'X'],
+        ['X', 'X', 'X'],
     ];
 
 //3 x 3 shapes
@@ -57,10 +64,10 @@ export const ShapeT: Square3Shape =
 //4 x 4 shapes
 export const ShapeI: Square4Shape =
     [
+        [' ', 'X', 'X', ' '],
         [' ', ' ', 'X', ' '],
         [' ', ' ', 'X', ' '],
-        [' ', ' ', 'X', ' '],
-        [' ', ' ', 'X', ' '],
+        [' ', 'X', 'X', ' '],
     ];
 
 export const AllShapes = [
@@ -70,15 +77,16 @@ export const AllShapes = [
     ShapeO,
     ShapeS,
     ShapeT,
-    ShapeZ
+    ShapeZ,
+    ShapeN
 ]
 export const AllShapeColours = [
-    "#F00",
-    "#0F0",
-    "#00F",
-    "#0FF",
-    "#F0F",
-    "#FF0",
+    "#90F1EF",
+    "#C8E4E8",
+    "#FFD6E0",
+    "#FFEF9F",
+    "#C1FBA4",
+    "#7BF1A8",
 ]
 export class Shape {
     shape: Square2Shape | Square3Shape | Square4Shape;

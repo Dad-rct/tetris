@@ -19,7 +19,7 @@ export const ShapeO: Square3Shape =
         ['X', 'X', ' '],
         ['X', 'X', ' '],
     ];
-    export const ShapeN: Square3Shape =
+export const ShapeN: Square3Shape =
     [
         ['X', 'X', 'X'],
         ['X', ' ', 'X'],
@@ -70,14 +70,14 @@ export const ShapeI: Square4Shape =
         [' ', 'X', 'X', ' '],
     ];
 
-    //4 x 4 shapes
+//4 x 4 shapes
 export const ShapeD: Square4Shape =
-[
-    ['X', 'X', 'X', ' '],
-    ['X', ' ', ' ', 'X'],
-    ['X', ' ', ' ', 'X'],
-    ['X', 'X', 'X', ' '],
-];
+    [
+        ['X', 'X', 'X', ' '],
+        ['X', ' ', ' ', 'X'],
+        ['X', ' ', ' ', 'X'],
+        ['X', 'X', 'X', ' '],
+    ];
 
 export const AllShapes = [
     ShapeI,
@@ -91,12 +91,12 @@ export const AllShapes = [
     ShapeD
 ]
 export const AllShapeColours = [
-    "#90F1EF",
-    "#C8E4E8",
-    "#FFD6E0",
-    "#FFEF9F",
-    "#C1FBA4",
-    "#7BF1A8",
+    "#FF0000",
+    "#00FF00",
+    "#0000FF",
+    //"#FF00FF",
+    //"#00FFFF",
+    //"#FFFF00",
 ]
 export class Shape {
     shape: Square2Shape | Square3Shape | Square4Shape;

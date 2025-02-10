@@ -72,10 +72,6 @@ export class GameBoard {
         }
     }
     destroyCompleteLines() {
-        const completeColumns = this.grid.map((col, x) => {
-            if (!col.some(v => !v)) return [x];
-            return []
-        }).flat();
         const completeRows: number[] = [];
         for (let y = 0; y < gameBoardSquaresHeightCount; y++) {
             const row = Array.from(new Array(gameBoardSquaresWidthCount))
@@ -84,17 +80,22 @@ export class GameBoard {
                 completeRows.push(y);
         }
         this.ctxPieces.beginPath();
-        for (const x of completeColumns) {
-            for (let y = 0; y < gameBoardSquaresHeightCount; y++) {
-                this.destroyPixel({ x, y }, false)
-            }
-        }
         for (const y of completeRows) {
+            let firstColor;
+            let skipRow = false;
             for (let x = 0; x < gameBoardSquaresWidthCount; x++) {
-                this.destroyPixel({ x, y }, false)
+                const thisColor = this.grid[x][y];
+                if (firstColor !== undefined && firstColor !== thisColor)
+                    skipRow = true
+                else
+                    firstColor = thisColor
             }
+            if (skipRow === false)
+                for (let x = 0; x < gameBoardSquaresWidthCount; x++) {
+                    this.destroyPixel({ x, y }, false)
+                }
         }
-        console.log(completeColumns, completeRows)
+        console.log(completeRows)
         this.ctxPieces.stroke();
     }
     getCompleteLines() {
@@ -160,7 +161,7 @@ export class GameBoard {
             this.grid[pixel.x][pixel.y] = shape.color;
         }
         this.drawOrClearShape(shape, at, true);
-        this.drawOrClearShape(shape, at, false, 0.4);
+        this.drawOrClearShape(shape, at, false, 1);
     }
     private drawPixel(pixel: iCOORD, color: string, opacity: number) {
         const borderWidth = squareSize / 10;

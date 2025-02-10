@@ -161,7 +161,7 @@ export class GameBoard {
             this.grid[pixel.x][pixel.y] = shape.color;
         }
         this.drawOrClearShape(shape, at, true);
-        this.drawOrClearShape(shape, at, false, 1);
+        this.drawOrClearShape(shape, at, false, 0.7);
     }
     private drawPixel(pixel: iCOORD, color: string, opacity: number) {
         const borderWidth = squareSize / 10;

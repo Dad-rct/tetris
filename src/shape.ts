@@ -94,9 +94,9 @@ export const AllShapeColours = [
     "#FF0000",
     "#00FF00",
     "#0000FF",
-    //"#FF00FF",
-    //"#00FFFF",
-    //"#FFFF00",
+    "#FF00FF",
+    "#00FFFF",
+    "#FFFF00",
 ]
 export class Shape {
     shape: Square2Shape | Square3Shape | Square4Shape;
